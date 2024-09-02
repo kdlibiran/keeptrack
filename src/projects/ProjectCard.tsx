@@ -15,6 +15,7 @@ function ProjectCard(props: ProjectCardProps) {
   const handleEditClick = (projectBeingEdited: Project) => {
     onEdit(projectBeingEdited);
   };
+
   return (
     <div className="card">
       <img src={project.imageUrl} alt={project.name} />
