@@ -1,27 +1,39 @@
 import React,{SyntheticEvent, useState} from "react";
 import {Project} from "./Project";
-
+import { useDispatch } from 'react-redux';
+import { saveProject } from './state/ProjectActions';
+import { ThunkDispatch } from 'redux-thunk';
+import { ProjectState } from './state/ProjectTypes';
+import { AnyAction } from 'redux';
 
 interface ProjectFormProps {
   project: Project;
-  onSave: (project: Project) => void;
   onCancel: () => void;
 }
 
-function ProjectForm({ project: initialProject, onSave, onCancel }: ProjectFormProps){
-  const [project, setProject] = useState(initialProject);
-  const [errors, setErrors] = useState({
+interface Errors {
+  name: string,
+  description: string,
+  budget: string,
+}
+
+function ProjectForm({ project: initialProject, onCancel }: ProjectFormProps){
+  const [project, setProject] = useState<Project>(initialProject);
+  const [errors, setErrors] = useState<Errors>({
     name: '',
     description: '',
     budget: '',
   });
-  const handleSubmit = (event: SyntheticEvent) => {
+
+  const dispatch = useDispatch<ThunkDispatch<ProjectState, any, AnyAction>>();
+
+  const handleSubmit = (event: SyntheticEvent): void => {
     event.preventDefault();
     if (!isValid()) return;
-    onSave(project);
+    dispatch(saveProject(project));
   };
 
-  const handleChange = (event: any) => {
+  const handleChange = (event: any): void => {
     const { type, name, value, checked } = event.target;
     let updatedValue = type === 'checkbox' ? checked : value;
 
@@ -29,7 +41,7 @@ function ProjectForm({ project: initialProject, onSave, onCancel }: ProjectFormP
       updatedValue = Number(updatedValue);
     }
 
-    const change = {
+    const change: {[name:string] : string | number | boolean } = {
       [name]: updatedValue,
     };
 
@@ -41,7 +53,7 @@ function ProjectForm({ project: initialProject, onSave, onCancel }: ProjectFormP
     setErrors(() => validate(updatedProject));
   };
 
-  function validate(project: Project) {
+  function validate(project: Project): Errors {
     let errors: any = { name: '', description: '', budget: '' };
     if (project.name.length === 0) {
       errors.name = 'Name is required';
@@ -58,7 +70,7 @@ function ProjectForm({ project: initialProject, onSave, onCancel }: ProjectFormP
     return errors;
   }
 
-  function isValid() {
+  function isValid(): boolean {
     return (
       errors.name.length === 0 &&
       errors.description.length === 0 &&
