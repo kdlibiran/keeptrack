@@ -6,13 +6,13 @@ import { loadProjects } from './state/ProjectActions';
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { ProjectState } from './state/ProjectTypes';
+import { Project } from './Project';
 
 function ProjectsPage() {
-  const loading = useSelector((appState: AppState) => appState.projectState.loading);
-  const projects = useSelector((appState: AppState) => appState.projectState.projects);
-  const error = useSelector((appState: AppState) => appState.projectState.error);
-  const currentPage = useSelector((appState: AppState) => appState.projectState.page);
-
+  const loading: boolean = useSelector((appState: AppState) => appState.projectState.loading);
+  const projects: Project[] = useSelector((appState: AppState) => appState.projectState.projects);
+  const error: string | undefined = useSelector((appState: AppState) => appState.projectState.error);
+  const currentPage: number = useSelector((appState: AppState) => appState.projectState.page);
   const dispatch = useDispatch<ThunkDispatch<ProjectState, any, AnyAction>>();
 
   useEffect(() => {

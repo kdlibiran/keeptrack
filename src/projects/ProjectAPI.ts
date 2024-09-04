@@ -1,7 +1,7 @@
 import { Project } from './Project';
 
 const baseUrl = 'http://localhost:4000';
-const url = `${baseUrl}/projects`;
+export const url = `${baseUrl}/projects`;
 
 type HttpErrorInfo = {
   status: number;
@@ -29,6 +29,8 @@ function translateStatusToErrorMessage(status: number): string {
       return 'There was an error retrieving the project(s). Please try again.';
   }
 }
+
+
 
 function checkStatus(response: Response): Response {
   if (!response.ok) {

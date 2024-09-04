@@ -33,18 +33,25 @@ function ProjectForm({ project: initialProject, onCancel }: ProjectFormProps){
     dispatch(saveProject(project));
   };
 
-  const handleChange = (event: any): void => {
-    const { type, name, value, checked } = event.target;
-    let updatedValue = type === 'checkbox' ? checked : value;
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>
+  ): void => {
+    const { type, name, value } = event.target;
 
+    let updatedValue: string | number | boolean = value;
+  
+    if (type === 'checkbox') {
+      updatedValue = (event.target as HTMLInputElement).checked
+    }
+  
     if (type === 'number') {
       updatedValue = Number(updatedValue);
     }
-
-    const change: {[name:string] : string | number | boolean } = {
+  
+    const change: { [name: string]: string | number | boolean } = {
       [name]: updatedValue,
     };
-
+  
     let updatedProject: Project;
     setProject((p) => {
       updatedProject = new Project({ ...p, ...change });
@@ -79,7 +86,8 @@ function ProjectForm({ project: initialProject, onCancel }: ProjectFormProps){
   }
 
   return (
-    <form className="input-group vertical" onSubmit={handleSubmit}>
+    <form aria-label="Edit a Project"
+      name="projectForm" className="input-group vertical" onSubmit={handleSubmit}>
       <label htmlFor="name">Project Name</label>
       <input type="text" name="name" placeholder="enter name" value={project.name} onChange={handleChange} />
       {errors.name.length > 0 && (

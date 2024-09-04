@@ -7,15 +7,16 @@ import { loadProject } from './state/ProjectActions';
 import { AnyAction } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 import { ProjectState } from './state/ProjectTypes';
+import { Project } from './Project';
 
 type ProjectPageParams = {
-    id: string;
+    id?: string;
 }
 
-function ProjectPage(props: any) {
-  const loading = useSelector((appState: AppState) => appState.projectState.loading);
-  const project = useSelector((appState: AppState) => appState.projectState.project);
-  const error = useSelector((appState: AppState) => appState.projectState.error);
+function ProjectPage(props: ProjectPageParams) {
+  const loading: boolean = useSelector((appState: AppState) => appState.projectState.loading);
+  const project: Project | null = useSelector((appState: AppState) => appState.projectState.project);
+  const error: string | undefined = useSelector((appState: AppState) => appState.projectState.error);
   const params = useParams<ProjectPageParams>();
   const id: number = Number(params.id);
 
@@ -24,6 +25,7 @@ function ProjectPage(props: any) {
   useEffect(() => {
     dispatch(loadProject(id));
   }, [dispatch]);
+  
   return (
     <div>
       <>

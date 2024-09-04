@@ -29,7 +29,7 @@ import {
   export function projectReducer(
     state = initialProjectState,
     action: ProjectActionTypes
-  ) {
+  ): ProjectState {
     switch (action.type) {
       case LOAD_PROJECTS_REQUEST:
         return { ...state, loading: true, error: '' };
